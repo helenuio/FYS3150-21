@@ -24,20 +24,20 @@ for filename in filenames: # for N1, N2, N3
         rerror.append(i[4])
     max_rerror[filename] = max(rerror)
     # Plotting numerical vs exact solutions
-    #plt.plot(x,n, label=filename)
-    #if filename == filenames[-1]: # Plot exact solution for maximum number of N
-        #plt.plot(x,e, label="eksakt")
-    #plt.legend()
-    #plt.xlabel("x")
-    #plt.ylabel("u(x)")
-    #plt.savefig(filename + ".pdf")
+    plt.plot(x,n, label=filename)
+    if filename == filenames[-1]: # Plot exact solution for maximum number of N
+        plt.plot(x,e, label="eksakt")
+    plt.legend()
+    plt.xlabel("x")
+    plt.ylabel("u(x)")
+    plt.savefig(filename + ".pdf")
 
     # Plotting absolute error
-    #plt.plot(x, aerror, label=filename)
-    #plt.xlabel("x")
-    #plt.ylabel("$log_{10}(|u_i-v_i|)$")
-    #plt.legend()
-    #plt.savefig("abs_error for" + filename + ".pdf")
+    plt.plot(x, aerror, label=filename)
+    plt.xlabel("x")
+    plt.ylabel("$log_{10}(|u_i-v_i|)$")
+    plt.legend()
+    plt.savefig("abs_error for" + filename + ".pdf")
 
     # Plotting relative error
     plt.plot(x, rerror, label=filename)
