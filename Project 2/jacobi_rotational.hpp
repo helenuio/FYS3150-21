@@ -7,7 +7,6 @@ class Jacobi_rotate {
 private:
   double m_a, m_d, m_eps;
   int m_n, m_k, m_l;
-  arma::mat m_R;
 
 public:
   void initialize(double a, double d, double eps, int n);
