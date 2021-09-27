@@ -1,1 +1,2 @@
-# Project-1-2021
+# Project-2
+For å endre størrelsen på matrisen man ønsker å finne egenverdiene og egenvektorene til, endrer man på n-verdien i main.cpp under int main-funksjonen. Når man kaller på jacobi_eigensolver-funksjonen under int main, opprettes det en tekstfil som inneholder de numeriske egenvektorene som korresponderer til de tre laveste egenverdiene. Navnet på filen vil automatisk være antallet man har valgt som "n" (her er n størrelsen på matrisen, dvs. uten endepunktene). For å plotte de analytiske og numeriske løsningene, kjører man plot_eig.py + navnet på filen du ønsker å plotte, i dette tilfellet "n" (uten anførselstegn). 
