@@ -83,8 +83,6 @@ void Jacobi_rotate::rotate(arma::mat& A, arma::mat& R)
   a_ll = A(m_l,m_l);
   A(m_k,m_k) = a_kk*c*c - 2*A(m_k,m_l)*c*s + a_ll*s*s;
   A(m_l,m_l) = a_ll*c*c + 2*A(m_k,m_l)*c*s + a_kk*s*s;
-  //A(m_k,m_k) = A(m_k,m_k)*c*c - 2*A(m_k,m_l)*c*s + A(m_l,m_l)*s*s;
-  //A(m_l,m_l) = A(m_l,m_l)*c*c + 2*A(m_k,m_l)*c*s + A(m_k,m_k)*s*s;
   A(m_k,m_l) = 0;
   A(m_l,m_k) = 0;
 
@@ -111,15 +109,13 @@ void Jacobi_rotate::jacobi_eigensolver(arma::mat& A)
 {
   // R starts out as identity matrix
   arma::mat R = arma::mat(m_n, m_n, arma::fill::eye);
+
   bool converged;
   int iterations = 0;
   int maxiter = m_n*m_n*m_n;
-  arma::mat eigenvectors(m_n, m_n);
-  arma::vec eigenvalues = arma::vec(m_n);
   double max = max_offdiag_symmetric(A);
 
   while (fabs(max) > m_eps && iterations < maxiter) {
-    //std::cout << "l " << m_l << " k " << m_k << std::endl;
     max = max_offdiag_symmetric(A);
     rotate(A,R);
     iterations++;
@@ -133,13 +129,41 @@ void Jacobi_rotate::jacobi_eigensolver(arma::mat& A)
     converged = false;
   }
 
+  // Print nr of iterations
+  std::cout << "iterations" << "\n" << iterations << std::endl;
+  std::cout << "converged" << "\n" << converged << std::endl;
+
   // Write the eigenvalues as entries in the vector "eigenvalues"
+  arma::mat eigenvectors(m_n, m_n);
+  arma::vec eigenvalues = arma::vec(m_n);
+
+  eigenvectors = normalise(R);
+
   for (int i = 0; i < m_n; i++) {
     eigenvalues(i) = A(i,i);
   }
 
-  std::cout << "numerical eigenvalues" << "\n" << eigenvalues << std::endl;
-  std::cout << "Diagonalized A" << "\n" << A << std::endl;
-  //std::cout << "numerical eigenvectors" << "\n" << normalise(R) << std::endl;
+
+  // Sorting the returned eigenvalues
+  arma::uvec indices = arma::sort_index(eigenvalues);
+
+  // Printing solutions
+  /*
+  std::cout << std::setprecision(4) << "numerical eigenvalues" << "\n" << eigenvalues(indices) << std::endl;
+  std::cout << std::setprecision(4) << "numerical eigenvectors" << "\n" << eigenvectors << std::endl;
+  */
+
+  // Write to file
+  std::ofstream ofile;
+  std::string N = std::to_string(m_n + 1); // Here N = n+1 is the total number of steps in the discretization
+  std::string filename = N;      // I'm using the opposite notation from the project description
+  ofile.open(filename);
+
+  for (int i = 0; i < 3; i++) {
+    int j = indices(i);
+    ofile << std::setprecision(4) << eigenvectors.col(j) << std::endl;
+  }
+  ofile.close();
+
 
 }
